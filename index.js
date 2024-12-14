@@ -20,6 +20,7 @@ function agregarProducto(nombre,precio,precioPorPorcion){
         };
     guardarProductosLocalStorage()
     alert(`agregado ${nombre} de  $${precio}`)
+    mostrarProductosGuardados()
     }else{
         alert(`El producto ${nombre} ya existe `)
     }
@@ -43,36 +44,45 @@ nuevoProducto.addEventListener("submit", (event)=>{
     function borrarProductos(nombre){
         if(productos[nombre]){
             delete productos[nombre];
-            alert(`el producto" ${nombre} "a sido eliminado`)
-        }else{
-            alert(`el producto "${nombre}"no se encontro`)
         }
     }
-   
-    const borrarProducto = document.querySelector("#borrarProducto")
-     borrarProducto.addEventListener("submit", (event)=>{
-        event.preventDefault();
-        const nombre = document.getElementById("borrarNombre").value
-        if(nombre){
-            borrarProductos(nombre)
-            guardarProductosLocalStorage()
-           borrarProducto.reset()
-        }else {
-            alert("introduce un nombre valido")
-    }
-    })
+
+  
 
     function buscarProductos (nombre){
         const resultadoDeBusqueda =document.getElementById("resultadoDeBusqueda");
-        resultadoDeBusqueda.innerHTML="";
         if(productos[nombre]){
             const producto =productos[nombre]
           
-        resultadoDeBusqueda.innerHTML = `<p> producto encontrado: ${nombre}<br> precio$ ${producto.precioTotal}<br> precio por porcion $${producto.precioPorcion}</p>`
+        resultadoDeBusqueda.innerHTML = 
+     `  <p>
+        producto encontrado: ${nombre}<br>
+        precio$ ${producto.precioTotal}<br>
+        precio por porcion $${producto.precioPorcion}
+        </p> 
+        <button class="borrar">borrar</button>
+        <button class="editar"> editar</button>`;
+        
+        const btnBorrar = document.querySelector(".borrar")
+        btnBorrar.addEventListener("click", (event)=>{
+             event.preventDefault();
+        //  const nombre = document.getElementById("buscarNombre").value
+             if(nombre,confirm(`seguro que quiere eliminar el producto ${nombre}`)){
+                
+                 borrarProductos(nombre)
+                 guardarProductosLocalStorage()
+                 resultadoDeBusqueda.innerHTML="";
+                 mostrarProductosGuardados()
+             }
+         })
+
         }else{
             resultadoDeBusqueda.innerHTML=`<p> producto no encontrado </p>`
         }
     }
+    
+    // function editarProducto {}
+
     const buscarProducto = document.getElementById("buscarProducto")
     buscarProducto.addEventListener("click", (event)=>{
         event.preventDefault();
@@ -83,26 +93,52 @@ nuevoProducto.addEventListener("submit", (event)=>{
         }
     })
 
+    const listaDeProductos = document.getElementById("listaDeProductos")
 
     function mostrarProductosGuardados(){
-        const listaDeProductos = document.getElementById("listaDeProductos")
+
         listaDeProductos.innerHTML="";
         if (Object.keys(productos).length===0){
             listaDeProductos.innerHTML=`<p>no hay productos en la lista</p>`;
             return;
         }
-
-        const lista = document.createElement("ul");
-        lista.classList.add("lista")
-        for(const[nombre,precio] of Object.entries(productos)){
-            const item = document.createElement("li");
-            const producto =productos[nombre]
+         const lista = document.createElement("ul");
+         lista.classList.add("lista")
+         for(const[nombre,precio] of Object.entries(productos)){
+             const item = document.createElement("li");
+             const producto =productos[nombre]
             item.textContent = `${nombre} $${producto.precioTotal}`;
-            lista.appendChild(item)
-        }
-        listaDeProductos.appendChild(lista)
+             lista.appendChild(item)
+         }
+         listaDeProductos.appendChild(lista)
     }
     mostrarProductosGuardados()
 
-   const mostrarProductos= document.getElementById("mostrarProductos")
-   mostrarProductos.addEventListener("click",mostrarProductosGuardados) 
+function guardarCambios(index){
+    const nombre = document.getElementById(`nombre-${index}`).value
+    const precio = parseFloat(document.getElementById(`precio-${index}`).value)
+
+    if(productos[index]){
+        productos[index].nombre = nombre 
+        productos[index].precio = precio
+
+        guardarProductosLocalStorage()
+        alert(`producto ${nombre} actualizado`)
+
+    }else{
+        alert("producto no encontrado ")
+    }
+}
+
+
+
+// const divProducto = document.createElement("div");
+// Object.entries(productos).forEach((producto, index)=>{
+//     divProducto.innerHTML=`
+//     <labe>nombre:<input type="text" value="${producto.nombre}" id="nombre-${index}"/></label><br>
+//     <labe>precio:<input type="number" value="${producto.precioTotal}" id="precio-${index}"/></label>
+//     <button onclick="guardarCambios(${index })">guardar</button>
+//     `
+// })
+
+// listaDeProductos.appendChild(divProducto)
