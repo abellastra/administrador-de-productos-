@@ -7,7 +7,7 @@
 }
 body {
         font-family: "Faculty Glyphic", sans-serif;
-        font-weight: 400;
+        font-weight: 600;
         font-style: normal;    
        background-color: #c99e87;
     
@@ -21,7 +21,7 @@ h1{
     display: flex;
     flex-direction: row;
     align-items: center;
-    /* margin: 0; */
+   
 }
 #agregaProducto, #borrarProducto, #buscarProducto,.Productos{
     display: flex;
@@ -55,7 +55,18 @@ form,.Productos{
 }
 button{
    width: 10em;
-    height: 2em;
+   height: 2em;
+   background-color: #c99e87;
+   border-radius: 0.5em;
+
+}
+#resultadoDeBusqueda{
+    background-color: #f2ccb7;
+    padding: 1em;
+    border-radius: 0.5em;
+    margin-top: 1em;
+    border: solid 2px black;
+   
 }
 .lista{
     margin-top: 0.5em;

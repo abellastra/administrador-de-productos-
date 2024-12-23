@@ -48,9 +48,9 @@ nuevoProducto.addEventListener("submit", (event)=>{
     }
 
   
-
+    const resultadoDeBusqueda =document.getElementById("resultadoDeBusqueda");
     function buscarProductos (nombre){
-        const resultadoDeBusqueda =document.getElementById("resultadoDeBusqueda");
+      
         if(productos[nombre]){
             const producto =productos[nombre]
           
@@ -64,11 +64,8 @@ nuevoProducto.addEventListener("submit", (event)=>{
         <button class="editar"> editar</button>`;
         
         const btnBorrar = document.querySelector(".borrar")
-        btnBorrar.addEventListener("click", (event)=>{
-             event.preventDefault();
-        //  const nombre = document.getElementById("buscarNombre").value
+        btnBorrar.addEventListener("click", ()=>{
              if(nombre,confirm(`seguro que quiere eliminar el producto ${nombre}`)){
-                
                  borrarProductos(nombre)
                  guardarProductosLocalStorage()
                  resultadoDeBusqueda.innerHTML="";
@@ -76,12 +73,40 @@ nuevoProducto.addEventListener("submit", (event)=>{
              }
          })
 
+         const btnEditar = document.querySelector(".editar")
+         btnEditar.addEventListener("click",()=>{
+            editarProducto(nombre)
+         })
         }else{
             resultadoDeBusqueda.innerHTML=`<p> producto no encontrado </p>`
         }
     }
     
-    // function editarProducto {}
+         function editarProducto(nombre) {
+          const producto =productos[nombre]
+          const nuevoPrecioTotal = prompt(`vas a cambiar el precio`)
+          const nuevoPrecioPorcion = prompt(`vas a cambiar el precio por porcion`)
+          const nuevoNombre = prompt(`vas a cambiar el nombre de: ${nombre} `)
+   
+          const nombreFinal = nuevoNombre && nuevoNombre.trim() !== "" ? nuevoNombre : nombre;
+
+          const precioTotalFinal = nuevoPrecioTotal > 0 ? parseFloat(nuevoPrecioTotal): producto.precioTotal
+
+          const precioPorcionFinal = nuevoPrecioPorcion > 0 ? parseFloat(nuevoPrecioPorcion) : producto.precioPorcion;
+
+            if (nombre!== nombreFinal){
+                delete productos[nombre]
+            }
+
+  
+            productos[nombreFinal] = {
+                precioTotal: parseFloat(precioTotalFinal),
+                precioPorcion: parseFloat(precioPorcionFinal),
+            };
+
+           guardarProductosLocalStorage()
+           mostrarProductosGuardados()
+        }
 
     const buscarProducto = document.getElementById("buscarProducto")
     buscarProducto.addEventListener("click", (event)=>{
@@ -129,16 +154,3 @@ function guardarCambios(index){
         alert("producto no encontrado ")
     }
 }
-
-
-
-// const divProducto = document.createElement("div");
-// Object.entries(productos).forEach((producto, index)=>{
-//     divProducto.innerHTML=`
-//     <labe>nombre:<input type="text" value="${producto.nombre}" id="nombre-${index}"/></label><br>
-//     <labe>precio:<input type="number" value="${producto.precioTotal}" id="precio-${index}"/></label>
-//     <button onclick="guardarCambios(${index })">guardar</button>
-//     `
-// })
-
-// listaDeProductos.appendChild(divProducto)
